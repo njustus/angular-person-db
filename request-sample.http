@@ -1,4 +1,4 @@
-POST http://localhost:8080/api/paged
+POST http://localhost:8080/api/paged?page=0&size=2
 Content-Type: application/json
 
 {
