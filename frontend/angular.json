@@ -66,6 +66,7 @@
               "buildTarget": "person-db:build:production"
             },
             "development": {
+              "proxyConfig": "./proxy.conf.json",
               "buildTarget": "person-db:build:development"
             }
           },

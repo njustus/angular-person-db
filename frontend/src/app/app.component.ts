@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import {DefaultService} from '../../generated-src/person-api';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,8 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'person-db';
+
+  constructor(private readonly defaultService: DefaultService) {
+    defaultService.pagedPersons().subscribe(page => console.log(page))
+  }
 }

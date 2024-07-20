@@ -1,0 +1,87 @@
+openapi: "3.1.0"
+info:
+  title: "person_db API"
+  description: "person_db API"
+  version: "1.0.0"
+servers:
+  - url: "https://localhost:8080/api"
+paths:
+  /paged:
+    post:
+      summary: "POST paged"
+      operationId: "pagedPersons"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonFilter"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/PersonPage"
+components:
+  schemas:
+    PersonFilter:
+      type: "object"
+      properties:
+        lastName:
+          type: "string"
+        birthDate:
+          type: "string"
+          format: "date"
+        city:
+          type: "string"
+    PersonPage:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+        size:
+          type: integer
+        numberOfElements:
+          type: integer
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Person'
+
+    Address:
+      type: "object"
+      properties:
+        street:
+          type: "string"
+        city:
+          type: "string"
+        id:
+          type: "integer"
+          format: "number"
+      required:
+        - "city"
+    Person:
+      type: "object"
+      properties:
+        firstName:
+          type: "string"
+        lastName:
+          type: "string"
+        email:
+          type: "string"
+        birthDate:
+          type: "string"
+          format: "date"
+        address:
+          $ref: "#/components/schemas/Address"
+        id:
+          type: "integer"
+          format: "number"
+      required:
+        - "firstName"
+        - "lastName"
+        - "email"
+        - "birthDate"
+        - "address"
