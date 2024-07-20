@@ -1,12 +1,15 @@
 package de.detim.njustus.person_db.person
 
+import jakarta.persistence.EntityManager
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
 
 @Service
 class PersonService(
     private val personRepository: PersonRepository,
+    private val entityManager: EntityManager
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -16,4 +19,13 @@ class PersonService(
     }
 
     fun isEmpty(): Boolean = personRepository.count() <= 0
+
+    fun findAll(filter: PersonFilter?, pageable: Pageable): Page<Person> {
+        log.info("searching with: {} - page: {}", filter, pageable)
+
+        return when (filter) {
+            null -> personRepository.findAll(pageable)
+            else -> personRepository.findBySearch(filter.lastName, filter.birthDate, filter.city, pageable)
+        }
+    }
 }
