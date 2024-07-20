@@ -1,0 +1,14 @@
+version: '3'
+
+tasks:
+  build:
+    cmds:
+      - gradle build
+  bootRun:
+    cmds:
+      - gradle bootRun
+  start:
+    dir: frontend
+    cmds:
+      - npm run generate
+      - npm start
