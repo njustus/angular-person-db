@@ -10,6 +10,21 @@ paths:
     post:
       summary: "POST paged"
       operationId: "pagedPersons"
+      parameters:
+        - name: "pageSize"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "int32"
+            default: "0"
+        - name: "pageIndex"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "int32"
+            default: "10"
       requestBody:
         content:
           application/json:
