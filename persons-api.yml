@@ -49,6 +49,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Person'
+      required: [
+        totalPages,
+        totalElements,
+        size,
+        numberOfElements,
+        content
+      ]
 
     Address:
       type: "object"
