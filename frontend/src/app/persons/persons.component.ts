@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {PersonTableComponent} from '../person-table/person-table.component';
 import {DefaultService, Person, PersonFilter} from '../../../generated-src/person-api';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
@@ -14,7 +14,7 @@ import {
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {PersonDetailComponent} from '../person-table/person-detail/person-detail.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {throttleTime} from 'rxjs';
+import {delay, throttleTime} from 'rxjs';
 
 export class PaginatorOffset {
   constructor(
@@ -32,6 +32,13 @@ export class PaginatorOffset {
 
   static default(): PaginatorOffset {
     return new PaginatorOffset(10, 0)
+  }
+
+  static fromParams(pageIndex: string | null, pageSize: string | null) {
+    return new PaginatorOffset(
+      +(pageIndex ?? 0),
+      +(pageSize ?? 0)
+    )
   }
 }
 
@@ -58,7 +65,7 @@ export interface EditablePerson extends Person {
   templateUrl: './persons.component.html',
   styleUrl: './persons.component.scss'
 })
-export class PersonsComponent {
+export class PersonsComponent implements OnInit {
   form = new FormGroup({
     lastName: new FormControl(),
     birthDate: new FormControl(),
@@ -78,7 +85,20 @@ export class PersonsComponent {
               private readonly activatedRoute: ActivatedRoute,
               private readonly router: Router
   ) {
+
+  }
+
+  ngOnInit(): void {
     this.loadPaginatedData()
+
+    this.activatedRoute.queryParamMap.subscribe(params => {
+      if (params.has('pageIndex')) {
+        this.offset = PaginatorOffset.fromParams(params.get('pageIndex'), params.get('pageSize'))
+      }
+      if (params.has('city')) {
+        this.form.patchValue({city: params.get('city')})
+      }
+    })
 
     this.form.valueChanges
       .subscribe(value => {
@@ -98,7 +118,8 @@ export class PersonsComponent {
   }
 
   private loadPaginatedData() {
-    this.defaultService.pagedPersons(this.offset.pageSize, this.offset.pageIndex, this.personFilter).subscribe(page => {
+    this.defaultService.pagedPersons(this.offset.pageSize, this.offset.pageIndex, this.personFilter)
+      .subscribe(page => {
       this.persons = page.content
       this.totalItems = page.totalElements
       this.offset = PaginatorOffset.default()

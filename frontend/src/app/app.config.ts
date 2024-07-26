@@ -21,7 +21,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       PersonApiModule.forRoot(() => new Configuration({basePath: "/api"})),
       BrowserModule,
-      BrowserAnimationsModule
+      BrowserAnimationsModule,
+      ReactiveFormsModule
     )
   ]
 };
