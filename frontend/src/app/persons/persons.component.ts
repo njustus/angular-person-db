@@ -85,7 +85,6 @@ export class PersonsComponent {
   }
 
   private loadPaginatedData() {
-    //TODO date filter geht nicht
     this.defaultService.pagedPersons(this.offset.pageSize, this.offset.pageIndex, this.personFilter).subscribe(page => {
       this.persons = page.content
       this.totalItems = page.totalElements
