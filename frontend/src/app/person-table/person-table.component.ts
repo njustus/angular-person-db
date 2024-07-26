@@ -12,6 +12,7 @@ import {
 } from '@angular/material/table';
 import {DatePipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
+import {EditablePerson} from '../persons/persons.component';
 
 @Component({
   selector: 'app-person-table',
@@ -26,7 +27,7 @@ import {MatIcon} from '@angular/material/icon';
 })
 export class PersonTableComponent {
   @Input({required: true})
-  public persons: Person[] = []
+  public persons: EditablePerson[] = []
 
   public readonly displayedColumns =
     [
@@ -43,5 +44,9 @@ export class PersonTableComponent {
 
   select(p: Person) {
     this.selected.emit(p)
+  }
+
+  isEditable(row: any) {
+    return row.wasEdited
   }
 }

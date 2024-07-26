@@ -30,6 +30,6 @@
 
 <div class="flex">
   @if (selectedPerson) {
-    <app-person-detail [person]="selectedPerson"></app-person-detail>
+    <app-person-detail [person]="selectedPerson" (updated)="handleUpdate($event)"></app-person-detail>
   }
 </div>

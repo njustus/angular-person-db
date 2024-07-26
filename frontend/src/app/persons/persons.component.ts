@@ -33,6 +33,10 @@ export class PaginatorOffset {
   }
 }
 
+export interface EditablePerson extends Person {
+  wasEdited?: boolean
+}
+
 @Component({
   selector: 'app-persons',
   standalone: true,
@@ -59,13 +63,13 @@ export class PersonsComponent {
     city: new FormControl(),
   })
 
-  persons: Person[] = []
+  persons: EditablePerson[] = []
 
   totalItems: number = 0
   offset: PaginatorOffset = PaginatorOffset.default()
 
   personFilter?: PersonFilter;
-  selectedPerson?: Person;
+  selectedPerson: Person | null = null;
 
   constructor(private readonly defaultService: DefaultService,
               private readonly cdr: ChangeDetectorRef
@@ -99,5 +103,12 @@ export class PersonsComponent {
 
   handleSelected($event: Person) {
     this.selectedPerson = $event;
+  }
+
+  handleUpdate(updatedPerson: Person) {
+    console.log('updating', updatedPerson)
+    const idx = this.persons.findIndex(it => it.id === updatedPerson.id)
+    this.persons = this.persons.map(it => it.id !== updatedPerson.id ? it : {...updatedPerson, wasEdited: true})
+    this.selectedPerson = null
   }
 }
