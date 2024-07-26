@@ -18,14 +18,18 @@
     </mat-form-field>
   </form>
 
-  <app-person-table [persons]="persons" (selected)="handleSelected($event)"></app-person-table>
+  @if(isLoading === false) {
+    <app-person-table [persons]="persons" (selected)="handleSelected($event)"></app-person-table>
 
-  <mat-paginator [length]="totalItems"
-                 [pageSize]="offset.pageSize"
-                 [pageSizeOptions]="[5, 10, 25, 100]"
-                 (page)="handlePageEvent($event)"
-                 aria-label="Select page">
-  </mat-paginator>
+    <mat-paginator [length]="totalItems"
+                   [pageSize]="offset.pageSize"
+                   [pageSizeOptions]="[5, 10, 25, 100]"
+                   (page)="handlePageEvent($event)"
+                   aria-label="Select page">
+    </mat-paginator>
+  } @else {
+    <p>Loading...</p>
+  }
 </div>
 
 <div class="flex">

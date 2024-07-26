@@ -14,7 +14,7 @@ import {
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {PersonDetailComponent} from '../person-table/person-detail/person-detail.component';
 import {ActivatedRoute, Router} from '@angular/router';
-import {delay, throttleTime} from 'rxjs';
+import {debounceTime, delay, tap, throttleTime} from 'rxjs';
 
 export class PaginatorOffset {
   constructor(
@@ -79,6 +79,7 @@ export class PersonsComponent implements OnInit {
 
   personFilter?: PersonFilter;
   selectedPerson: Person | null = null;
+  isLoading: boolean = true;
 
   constructor(private readonly defaultService: DefaultService,
               private readonly activatedRoute: ActivatedRoute,
@@ -100,13 +101,16 @@ export class PersonsComponent implements OnInit {
     })
 
     this.form.valueChanges
-      .subscribe(value => {
-        console.log("form", value)
-        this.personFilter = value
-        this.offset = PaginatorOffset.default()
-        this.updateQueryParams()
-        this.loadPaginatedData()
-      })
+      .pipe(
+        debounceTime(300),
+        tap(value => {
+          console.log("form", value)
+          this.personFilter = value
+          this.offset = PaginatorOffset.default()
+          this.updateQueryParams()
+          this.loadPaginatedData()
+        })
+      ).subscribe()
   }
 
   handlePageEvent(event: PageEvent) {
@@ -117,12 +121,15 @@ export class PersonsComponent implements OnInit {
   }
 
   private loadPaginatedData() {
-    this.defaultService.pagedPersons(this.offset.pageSize, this.offset.pageIndex, this.personFilter)
-      .subscribe(page => {
-      this.persons = page.content
-      this.totalItems = page.totalElements
-      this.offset = PaginatorOffset.default()
-    })
+    this.isLoading = true
+    this.defaultService.pagedPersons(this.offset.pageSize, this.offset.pageIndex, this.personFilter).pipe(
+      tap(page => {
+        this.persons = page.content
+        this.totalItems = page.totalElements
+        this.offset = PaginatorOffset.default()
+        this.isLoading = false
+      })
+    ).subscribe()
   }
 
   private updateQueryParams() {
