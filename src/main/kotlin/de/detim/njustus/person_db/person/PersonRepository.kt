@@ -13,9 +13,9 @@ interface PersonRepository : CrudRepository<Person, Long> {
     @Query("""
         SELECT p
         FROM Person p
-        WHERE (:lastName IS NULL OR p.lastName LIKE :lastName)
-          AND (:birthDate IS NULL OR p.birthDate = :birthDate)
-          AND (:city IS NULL OR p.address.city LIKE :city)
+        WHERE (:lastName IS NULL OR p.lastName LIKE :lastName%)
+          AND (:birthDate IS NULL OR p.birthDate >= :birthDate)
+          AND (:city IS NULL OR p.address.city LIKE :city%)
             """
     )
     fun findBySearch(lastName: String?, birthDate: LocalDate?, city: String?, pageable: Pageable): Page<Person>

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils
 
 @Service
 class PersonService(
@@ -25,7 +26,10 @@ class PersonService(
 
         return when (filter) {
             null -> personRepository.findAll(pageable)
-            else -> personRepository.findBySearch(filter.lastName, filter.birthDate, filter.city, pageable)
+            else -> personRepository.findBySearch(if(StringUtils.hasText(filter.lastName)) filter.lastName else null,
+                filter.birthDate,
+                if(StringUtils.hasText(filter.city)) filter.city else null,
+                pageable)
         }
     }
 }
