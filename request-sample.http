@@ -1,6 +1,7 @@
-POST http://localhost:8080/api/paged?page=0&size=10&sort=birthDate,desc
+POST http://localhost:8080/api/paged?pageIndex=0
 Content-Type: application/json
 
 {
-    "lastName": "Peter"
+    "lastName": "S",
+    "city": "Fr"
 }

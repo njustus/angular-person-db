@@ -11,12 +11,13 @@ import java.time.LocalDate
 @Repository
 interface PersonRepository : CrudRepository<Person, Long> {
     @Query("""
-        SELECT p
-        FROM Person p
-        WHERE (:lastName IS NULL OR p.lastName LIKE CONCAT(:lastName, '%'))
-          AND (:birthDate IS NULL OR p.birthDate >= :birthDate)
-          AND (:city IS NULL OR p.address.city LIKE CONCAT(:city, '%'))
-            """
+        SELECT p.*
+        FROM PERSON p
+        JOIN ADDRESS ON P.ADDRESS_ID = ADDRESS.ID
+        WHERE (:lastName IS NULL OR p.LAST_NAME LIKE CONCAT(:lastName, '%'))
+          AND (:birthDate IS NULL OR p.BIRTH_DATE >= :birthDate)
+          AND (:city IS NULL OR ADDRESS.CITY LIKE CONCAT(:city, '%'))
+            """, nativeQuery = true
     )
     fun findBySearch(lastName: String?, birthDate: LocalDate?, city: String?, pageable: Pageable): Page<Person>
 

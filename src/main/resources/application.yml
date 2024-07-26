@@ -4,13 +4,19 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+  data:
+    jdbc:
+      dialect: h2
 server:
   port: 8080
   servlet:
     context-path: /api
   error:
     include-message: always
-
+  jetty:
+    threads:
+      max: 1
 #management:
 #  endpoints:
 #    web.exposure.include: health, info
@@ -21,3 +27,4 @@ server:
 logging:
   level:
     de.detim.njustus.person_db: debug
+    org.hibernate.SQL: DEBUG
