@@ -2,8 +2,8 @@
   <p class="text-xl-900 text-green-500">persons works!</p>
   <app-person-table [persons]="persons"></app-person-table>
 
-<mat-paginator [length]="100"
-              [pageSize]="10"
+<mat-paginator [length]="totalItems"
+              [pageSize]="offset.pageSize"
               [pageSizeOptions]="[5, 10, 25, 100]"
                (page)="handlePageEvent($event)"
               aria-label="Select page">

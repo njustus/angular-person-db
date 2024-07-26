@@ -35,6 +35,7 @@ export class PaginatorOffset {
 export class PersonsComponent {
   persons: Person[] = []
 
+  totalItems: number = 0
   offset: PaginatorOffset = PaginatorOffset.default()
 
   constructor(private readonly defaultService: DefaultService) {
@@ -49,6 +50,7 @@ export class PersonsComponent {
   private loadPaginatedData() {
     this.defaultService.pagedPersons(this.offset.pageSize, this.offset.pageIndex).subscribe(page => {
       this.persons = page.content
+      this.totalItems = page.totalElements
       console.log(page)
     })
   }
