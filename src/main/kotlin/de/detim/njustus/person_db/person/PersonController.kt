@@ -33,7 +33,7 @@ class PersonController(
         @RequestParam(required = false, defaultValue = "0") pageIndex: Int
     ): Page<Person> {
         val pageable = Pageable.ofSize(pageSize).withPage(pageIndex)
-        Thread.sleep(1000)
+        Thread.sleep(500)
         return personService.findAll(filter, pageable)
     }
 }
