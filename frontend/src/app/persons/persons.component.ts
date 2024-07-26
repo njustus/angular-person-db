@@ -13,6 +13,8 @@ import {
 } from '@angular/material/datepicker';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {PersonDetailComponent} from '../person-table/person-detail/person-detail.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {throttleTime} from 'rxjs';
 
 export class PaginatorOffset {
   constructor(
@@ -72,7 +74,9 @@ export class PersonsComponent {
   selectedPerson: Person | null = null;
 
   constructor(private readonly defaultService: DefaultService,
-              private readonly cdr: ChangeDetectorRef
+              private readonly cdr: ChangeDetectorRef,
+              private readonly activatedRoute: ActivatedRoute,
+              private readonly router: Router
   ) {
     this.loadPaginatedData()
 
@@ -81,12 +85,15 @@ export class PersonsComponent {
         console.log("form", value)
         this.personFilter = value
         this.offset = PaginatorOffset.default()
+        this.updateQueryParams()
         this.loadPaginatedData()
       })
   }
 
   handlePageEvent(event: PageEvent) {
     this.offset = PaginatorOffset.fromPaginationEvent(event)
+
+    this.updateQueryParams()
     this.loadPaginatedData()
   }
 
@@ -95,9 +102,19 @@ export class PersonsComponent {
       this.persons = page.content
       this.totalItems = page.totalElements
       this.offset = PaginatorOffset.default()
+    })
+  }
 
-      this.cdr.detectChanges()
-      // console.log(page)
+  private updateQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        pageIndex: this.offset.pageIndex,
+        pageSize: this.offset.pageSize,
+        ...this.form.value
+      },
+      queryParamsHandling: 'merge',
+      skipLocationChange: false
     })
   }
 
