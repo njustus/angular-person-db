@@ -25,6 +25,16 @@
     <td mat-cell *matCellDef="let element"> {{element.birthDate | date: 'mediumDate'}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="edit">
+    <th mat-header-cell *matHeaderCellDef> </th>
+    <td mat-cell *matCellDef="let element" class="hover:text-blue-500">
+      <button (click)="select(element)">
+        <mat-icon fontIcon="edit"></mat-icon>
+      </button>
+    </td>
+
+  </ng-container>
+
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

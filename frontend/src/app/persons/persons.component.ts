@@ -12,6 +12,7 @@ import {
   MatDatepickerToggle
 } from '@angular/material/datepicker';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {PersonDetailComponent} from '../person-table/person-detail/person-detail.component';
 
 export class PaginatorOffset {
   constructor(
@@ -46,7 +47,7 @@ export class PaginatorOffset {
     MatDatepicker,
     MatDatepickerInput,
     ReactiveFormsModule,
-    MatFormFieldModule, MatInputModule, MatDatepickerModule
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, PersonDetailComponent
   ],
   templateUrl: './persons.component.html',
   styleUrl: './persons.component.scss'
@@ -64,6 +65,7 @@ export class PersonsComponent {
   offset: PaginatorOffset = PaginatorOffset.default()
 
   personFilter?: PersonFilter;
+  selectedPerson?: Person;
 
   constructor(private readonly defaultService: DefaultService,
               private readonly cdr: ChangeDetectorRef
@@ -91,7 +93,11 @@ export class PersonsComponent {
       this.offset = PaginatorOffset.default()
 
       this.cdr.detectChanges()
-      console.log(page)
+      // console.log(page)
     })
+  }
+
+  handleSelected($event: Person) {
+    this.selectedPerson = $event;
   }
 }
