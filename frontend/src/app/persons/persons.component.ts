@@ -81,7 +81,6 @@ export class PersonsComponent implements OnInit {
   selectedPerson: Person | null = null;
 
   constructor(private readonly defaultService: DefaultService,
-              private readonly cdr: ChangeDetectorRef,
               private readonly activatedRoute: ActivatedRoute,
               private readonly router: Router
   ) {
