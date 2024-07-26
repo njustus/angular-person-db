@@ -46,6 +46,6 @@ class PersonFakerService(
         )
 
     companion object {
-        const val LIMIT = 5000
+        const val LIMIT = 500000
     }
 }
